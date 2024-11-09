@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
-        ArvoreBST arvore = new ArvoreBST();
+        ArvoreAVL arvore = new ArvoreAVL();
         Scanner s = new Scanner(System.in);
         int opcao, numero;
 

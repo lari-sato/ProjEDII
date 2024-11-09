@@ -12,22 +12,18 @@ public class ArvoreBST{
     }
 
     public No getRoot(){
-        return raiz;
+        return this.raiz;
     }
 
     public boolean isEmpty(){
-        return raiz == null;
+        return getRoot() == null;
     }
 
     public void inserir(int valor){
         No no = new No(valor);
 
-        if (raiz == null){
-            raiz = no;
-            return;
-        }
-
-        inserir(getRoot(), no);
+        if (getRoot() == null) setRoot(no);
+        else inserir(getRoot(), no);
     }
 
     private void inserir(No raiz, No no){
@@ -91,7 +87,7 @@ public class ArvoreBST{
         
     }
     
-    private No menorMaior(No no){
+    protected No menorMaior(No no){
         while (no.getEsquerda() != null) no = no.getEsquerda();
         return no;
     }
@@ -120,17 +116,6 @@ public class ArvoreBST{
             return esquerda > direita ? esquerda+1 : direita+1;
         }
     }
-
-   public boolean ehBinaria(){
-        return ehBinaria(raiz);
-   }
-
-   private boolean ehBinaria(No no){
-        if (no == null) return true;
-        else if(no.getEsquerda() == null && no.getDireita() == null) return true;
-        else if ((no.getEsquerda() != null && no.getEsquerda().getValor() > no.getValor()) || (no.getDireita() != null && no.getDireita().getValor() < no.getValor())) return false;
-        return ehBinaria(no.getEsquerda()) && ehBinaria(no.getDireita());
-   }
 
     public void printTree(){
         if (isEmpty()) System.out.print("Árvore vazia.\n");
