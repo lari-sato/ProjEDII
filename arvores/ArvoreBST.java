@@ -111,13 +111,13 @@ public class ArvoreBST{
         return altura(raiz);
     }
 
-    private int altura(No no){
+    protected int altura(No no){
         if (no == null) return -1;
-        else if (no.esquerda == null && no.direita == null) return 0;
+        else if (no.getEsquerda() == null && no.getDireita() == null) return 0;
         else{
-            int esquerda = altura(no.esquerda);
-            int direita = altura(no.direita);
-            return esquerda > direita ? esquerda + 1 : direita + 1;
+            int esquerda = altura(no.getEsquerda());
+            int direita = altura(no.getDireita());
+            return esquerda > direita ? esquerda+1 : direita+1;
         }
     }
 
@@ -127,27 +127,26 @@ public class ArvoreBST{
 
    private boolean ehBinaria(No no){
         if (no == null) return true;
-        else if(no.esquerda == null && no.direita == null) return true;
-        else if ((no.esquerda != null && no.esquerda.valor > no.valor) || (no. direita != null && no.direita.valor < no.valor)) return false;
-        return ehBinaria(no.esquerda) && ehBinaria(no.direita);
+        else if(no.getEsquerda() == null && no.getDireita() == null) return true;
+        else if ((no.getEsquerda() != null && no.getEsquerda().getValor() > no.getValor()) || (no.getDireita() != null && no.getDireita().getValor() < no.getValor())) return false;
+        return ehBinaria(no.getEsquerda()) && ehBinaria(no.getDireita());
    }
 
     public void printTree(){
-        if (isEmpty()){
-            System.out.print("Árvore vazia.\n");
-        }else{
-            printTree(raiz, 0);
-        }
+        if (isEmpty()) System.out.print("Árvore vazia.\n");
+        else printTree(raiz, 0);
     }
 
-    private void printTree(No no, int level){
+    private void printTree(No no, int nivel){
         if (no != null){
-            printTree(no.direita, level + 1);
-            for (int i = 0; i < level; i++){
+            printTree(no.getDireita(), nivel+1);
+            
+            for (int i = 0; i < nivel; i++){
                 System.out.print("    ");
             }
-            System.out.println(no.valor);
-            printTree(no.esquerda, level + 1);
+
+            System.out.println(no.getValor());
+            printTree(no.getEsquerda(), nivel+1);
         }
     }
 }

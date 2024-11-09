@@ -12,12 +12,12 @@ public class ArvoreAVL extends ArvoreBST{
     private boolean ehAVL(No no) {
         if (no == null) return true;
 
-        int alturaEsquerda = altura(no.esquerda);
-        int alturaDireita = altura(no.direita);
+        int alturaEsquerda = altura(no.getEsquerda());
+        int alturaDireita = altura(no.getDireita());
 
         int fatorBalanceamento = Math.abs(alturaEsquerda - alturaDireita);
 
-        if (fatorBalanceamento <= 1 && ehAVL(no.esquerda) && ehAVL(no.direita)) return true;
+        if (fatorBalanceamento <= 1 && ehAVL(no.getEsquerda()) && ehAVL(no.getDireita())) return true;
 
         return false;
     }
