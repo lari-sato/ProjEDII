@@ -7,14 +7,13 @@ public class ArvoreAVL extends ArvoreBST{
     }
 
     @Override
-    public void inserir(int valor){
-        No no = new No(valor);
+    public void inserir(No no){
         if (getRoot() == null) setRoot(no);
         else inserir(getRoot(), no);
     }
 
     private void inserir(No raiz, No no){
-        if (no.getValor() <= raiz.getValor()){
+        if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
             if (raiz.getEsquerda() == null){
                 raiz.setEsquerda(no);
                 no.setPai(raiz);
@@ -29,14 +28,14 @@ public class ArvoreAVL extends ArvoreBST{
     }
 
     @Override
-    public void remover(int valor) {
-        remover(getRoot(), new No(valor));
+    public void remover(String nome){
+        remover(getRoot(), nome);
     }
 
-    private void remover(No raiz, No no) {
+    private void remover(No raiz, String nome){
         if (raiz == null) return;
-        if (no.getValor() < raiz.getValor()) remover(raiz.getEsquerda(), no);
-        else if (no.getValor() > raiz.getValor()) remover(raiz.getDireita(), no);
+        if (nome.compareTo(raiz.getNomeEscola()) < 0) remover(raiz.getEsquerda(), nome);
+        else if (nome.compareTo(raiz.getNomeEscola()) > 0) remover(raiz.getDireita(), nome);
         else{
             if (raiz.getEsquerda() == null && raiz.getDireita() == null) {
                 if (raiz.getPai() != null){
@@ -69,8 +68,8 @@ public class ArvoreAVL extends ArvoreBST{
 
             else{
                 No aux = menorMaior(raiz.getDireita());
-                remover(raiz.getDireita(), aux);
-                raiz.setValor(aux.getValor());
+                remover(raiz.getDireita(), aux.getNomeEscola());
+                raiz.copiarValores(aux);
             }
         }
         balancear(raiz);

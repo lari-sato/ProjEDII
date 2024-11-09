@@ -5,7 +5,8 @@ public class Main {
     public static void main(String[] args){
         ArvoreAVL arvore = new ArvoreAVL();
         Scanner s = new Scanner(System.in);
-        int opcao, numero;
+        int opcao;
+        String nome;
 
         while (true){
             System.out.print("\n\nMENU\n\n1. Inserir número na árvore\n"+
@@ -17,23 +18,24 @@ public class Main {
             
             System.out.print("\nDigite sua opção: ");
             opcao = s.nextInt();
+            s.nextLine();
 
             switch(opcao){
                 case 1:
-                    System.out.print("Digite um número: ");
-                    numero = s.nextInt();
-                    arvore.inserir(numero);
+                    System.out.print("Digite o nome da escola: ");
+                    nome = s.nextLine();
+                    arvore.inserir(new No(nome));
                     
                     break;
                 case 2:
-                    System.out.print("Digite o número a ser removido: ");
-                    numero = s.nextInt();
-                    arvore.remover(numero);
+                    System.out.print("Digite o nome da escola a ser removida: ");
+                    nome = s.nextLine();
+                    arvore.remover(nome);
                     break;
                 case 3:
-                    System.out.print("Digite um número para buscar: ");
-                    numero = s.nextInt();
-                    No no = arvore.buscar(numero);
+                    System.out.print("Digite o nome da escola para buscar: ");
+                    nome = s.nextLine();
+                    No no = arvore.buscar(nome);
                     System.out.print("Nó encontrado!\n" + no);
                     break;
                 case 4:
