@@ -15,84 +15,194 @@ public class No{
     private float APR_1;
     private float REP_1;
     private float ABA_1;
-    private float APR_1_A;
-    private float REP_1_A;
-    private float ABA_1_A;
     private float APR_2;
     private float REP_2;
     private float ABA_2;
-    private float APR_2_A;
-    private float REP_2_A;
-    private float ABA_2_A;
     private float APR_3;
     private float REP_3;
     private float ABA_3;
 
-    public No(String nome){
+    public No(){
         this.esquerda = null;
         this.direita = null;
         this.pai = null;
-        this.nomeEscola = nome;
-    }
-
-    public No(int ano, int codDiretoria, String nomeDiretoria, String municipio, int codRede,
-              int codEscola, String nomeEscola, int codTipoEscola, float APR_1, float REP_1,
-              float ABA_1, float APR_1_A, float REP_1_A, float ABA_1_A, float APR_2, float REP_2,
-              float ABA_2, float APR_2_A, float REP_2_A, float ABA_2_A, float APR_3, float REP_3, float ABA_3){
-        this.esquerda = null;
-        this.direita = null;
-        this.pai = null;
-        this. ano = ano;
-        this.codDiretoria = codDiretoria;
-        this.nomeDiretoria = nomeDiretoria;
-        this.municipio = municipio;
-        this.codRede = codRede;
-        this.codEscola = codEscola;
-        this.nomeEscola = nomeEscola;
-        this.codTipoEscola = codTipoEscola;
-        this.APR_1 = APR_1;
-        this.REP_1 = REP_1;
-        this.ABA_1 = ABA_1;
-        this.APR_1_A = APR_1_A;
-        this.REP_1_A = REP_1_A;
-        this.ABA_1_A = ABA_1_A;
-        this.APR_2 = APR_2;
-        this.REP_2 = REP_2;
-        this.ABA_2 = ABA_2;
-        this.APR_2_A = APR_2_A;
-        this.REP_2_A = REP_2_A;
-        this.ABA_2_A = ABA_2_A;
-        this.APR_3 = APR_3;
-        this.REP_3 = REP_3;
-        this.ABA_3 = ABA_3;
+        this.ano = 0;
+        this.codDiretoria = 0;
+        this.nomeDiretoria = "";
+        this.municipio = "";
+        this.codRede = 0;
+        this.codEscola = 0;
+        this.nomeEscola = "";
+        this.codTipoEscola = 0;
+        this.APR_1 = 0;
+        this.REP_1 = 0;
+        this.ABA_1 = 0;
+        this.APR_2 = 0;
+        this.REP_2 = 0;
+        this.ABA_2 = 0;
+        this.APR_3 = 0;
+        this.REP_3 = 0;
+        this.ABA_3 = 0;
     }
 
     public No getEsquerda(){
         return esquerda;
     }
 
-    public void setEsquerda(No esquerda){
-        this.esquerda = esquerda;
-    }
-
     public No getDireita(){
         return direita;
-    }
-
-    public void setDireita(No direita){
-        this.direita = direita;
     }
 
     public No getPai(){
         return pai;
     }
 
-    public void setPai(No pai){
-        this.pai = pai;
+    public int getAno(){
+        return ano;
+    }
+
+    public int getCodDiretoria(){
+        return codDiretoria;
+    }
+
+    public String getNomeDiretoria(){
+        return nomeDiretoria;
+    }
+
+    public String getMunicipio(){
+        return municipio;
+    }
+
+    public int getCodRede(){
+        return codRede;
+    }
+
+    public int getCodEscola(){
+        return codEscola;
     }
 
     public String getNomeEscola(){
         return nomeEscola;
+    }
+
+    public int getCodTipoEscola(){
+        return codTipoEscola;
+    }
+
+    public float getAPR_1(){
+        return APR_1;
+    }
+
+    public float getREP_1(){
+        return REP_1;
+    }
+
+    public float getABA_1(){
+        return ABA_1;
+    }
+
+    public float getAPR_2(){
+        return APR_2;
+    }
+
+    public float getREP_2(){
+        return REP_2;
+    }
+
+    public float getABA_2(){
+        return ABA_2;
+    }
+
+    public float getAPR_3(){
+        return APR_3;
+    }
+
+    public float getREP_3(){
+        return REP_3;
+    }
+
+    public float getABA_3(){
+        return ABA_3;
+    }
+
+    public void setEsquerda(No esquerda){
+        this.esquerda = esquerda;
+    }
+
+    public void setDireita(No direita){
+        this.direita = direita;
+    }
+
+    public void setPai(No pai){
+        this.pai = pai;
+    }
+
+    public void setAno(int ano){
+        this.ano = ano;
+    }
+
+    public void setCodDiretoria(int codDiretoria){
+        this.codDiretoria = codDiretoria;
+    }
+
+    public void setNomeDiretoria(String nomeDiretoria){
+        this.nomeDiretoria = nomeDiretoria;
+    }
+
+    public void setMunicipio(String municipio){
+        this.municipio = municipio;
+    }
+
+    public void setCodRede(int codRede){
+        this.codRede = codRede;
+    }
+
+    public void setCodEscola(int codEscola){
+        this.codEscola = codEscola;
+    }
+
+    public void setNomeEscola(String nomeEscola){
+        this.nomeEscola = nomeEscola;
+    }
+
+    public void setCodTipoEscola(int codTipoEscola){
+        this.codTipoEscola = codTipoEscola;
+    }
+
+    public void setAPR_1(float APR_1){
+        this.APR_1 = APR_1;
+    }
+
+    public void setREP_1(float REP_1){
+        this.REP_1 = REP_1;
+    }
+
+    public void setABA_1(float ABA_1){
+        this.ABA_1 = ABA_1;
+    }
+
+    public void setAPR_2(float APR_2){
+        this.APR_2 = APR_2;
+    }
+
+    public void setREP_2(float REP_2){
+        this.REP_2 = REP_2;
+    }
+
+    public void setABA_2(float ABA_2){
+        this.ABA_2 = ABA_2;
+    }
+
+    public void setAPR_3(float APR_3){
+        this.APR_3 = APR_3;
+    }
+
+    public void setREP_3(float REP_3){
+        this.REP_3 = REP_3;
+    }
+
+    public void setABA_3(float ABA_3){
+        this.ABA_3 = ABA_3;
     }
 
     public void copiarValores(No no){
@@ -107,15 +217,9 @@ public class No{
         this.APR_1 = no.APR_1;
         this.REP_1 = no.REP_1;
         this.ABA_1 = no.ABA_1;
-        this.APR_1_A = no.APR_1_A;
-        this.REP_1_A = no.REP_1_A;
-        this.ABA_1_A = no.ABA_1_A;
         this.APR_2 = no.APR_2;
         this.REP_2 = no.REP_2;
         this.ABA_2 = no.ABA_2;
-        this.APR_2_A = no.APR_2_A;
-        this.REP_2_A = no.REP_2_A;
-        this.ABA_2_A = no.ABA_2_A;
         this.APR_3 = no.APR_3;
         this.REP_3 = no.REP_3;
         this.ABA_3 = no.ABA_3;

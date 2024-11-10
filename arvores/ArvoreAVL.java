@@ -1,47 +1,57 @@
 package ProjEDII.arvores;
 
 public class ArvoreAVL extends ArvoreBST{
-
     public ArvoreAVL(){
         setRoot(null);
+        setNumBuscas(0);
+        setNumInsercoes(0);
+        setNumRemocoes(0);
     }
 
     @Override
     public void inserir(No no){
-        if (getRoot() == null) setRoot(no);
-        else inserir(getRoot(), no);
+        if (getRoot() == null)  setRoot(no);
+        else setNumInsercoes(getNumInsercoes()+inserir(getRoot(), no, 1));
     }
 
-    private void inserir(No raiz, No no){
+    private int inserir(No raiz, No no, int comparacoes){
+        comparacoes++;
+
         if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
             if (raiz.getEsquerda() == null){
                 raiz.setEsquerda(no);
                 no.setPai(raiz);
-            }else inserir(raiz.getEsquerda(), no);
-        } else{
+                return comparacoes;
+            }else inserir(raiz.getEsquerda(), no, comparacoes);
+        }else{
             if (raiz.getDireita() == null){
                 raiz.setDireita(no);
                 no.setPai(raiz);
-            } else inserir(raiz.getDireita(), no);
+                return comparacoes;
+            }else inserir(raiz.getDireita(), no, comparacoes);
         }
         balancear(raiz);
+        return comparacoes;
     }
 
     @Override
     public void remover(String nome){
-        remover(getRoot(), nome);
+        setNumRemocoes(remover(getRoot(), nome, 1));
     }
 
-    private void remover(No raiz, String nome){
-        if (raiz == null) return;
-        if (nome.compareTo(raiz.getNomeEscola()) < 0) remover(raiz.getEsquerda(), nome);
-        else if (nome.compareTo(raiz.getNomeEscola()) > 0) remover(raiz.getDireita(), nome);
+    private int remover(No raiz, String nome, int comparacoes){
+        if (raiz == null) return comparacoes;
+
+        comparacoes++;
+
+        if (nome.compareTo(raiz.getNomeEscola()) < 0) return remover(raiz.getEsquerda(), nome, comparacoes);
+        else if (nome.compareTo(raiz.getNomeEscola()) > 0) return remover(raiz.getDireita(), nome, comparacoes);
         else{
-            if (raiz.getEsquerda() == null && raiz.getDireita() == null) {
+            if (raiz.getEsquerda() == null && raiz.getDireita() == null){
                 if (raiz.getPai() != null){
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(null);
                     else raiz.getPai().setDireita(null);
-                } else setRoot(null);
+                }else setRoot(null);
             }
 
             else if (raiz.getEsquerda() == null){
@@ -49,18 +59,18 @@ public class ArvoreAVL extends ArvoreBST{
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getDireita());
                     else raiz.getPai().setDireita(raiz.getDireita());
                     raiz.getDireita().setPai(raiz.getPai());
-                } else{
+                }else{
                     setRoot(raiz.getDireita());
                     raiz.setPai(null);
                 }
             }
             
             else if (raiz.getDireita() == null){
-                if (raiz.getPai() != null) {
+                if (raiz.getPai() != null){
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getEsquerda());
                     else raiz.getPai().setDireita(raiz.getEsquerda());
                     raiz.getEsquerda().setPai(raiz.getPai());
-                } else{
+                }else{
                     setRoot(raiz.getEsquerda());
                     raiz.setPai(null);
                 }
@@ -68,11 +78,12 @@ public class ArvoreAVL extends ArvoreBST{
 
             else{
                 No aux = menorMaior(raiz.getDireita());
-                remover(raiz.getDireita(), aux.getNomeEscola());
+                remover(raiz.getDireita(), aux.getNomeEscola(), comparacoes);
                 raiz.copiarValores(aux);
             }
         }
         balancear(raiz);
+        return comparacoes;
     }
 
     private void balancear(No no){
@@ -81,7 +92,7 @@ public class ArvoreAVL extends ArvoreBST{
         if (fb > 1){
             if (fatorBalanceamento(no.getEsquerda()) < 0) rotacionarEsquerda(no.getEsquerda());
             rotacionarDireita(no);
-        } else if (fb < -1){
+        }else if (fb < -1){
             if (fatorBalanceamento(no.getDireita()) > 0) rotacionarDireita(no.getDireita());
             rotacionarEsquerda(no);
         }

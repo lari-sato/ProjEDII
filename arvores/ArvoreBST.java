@@ -2,17 +2,47 @@ package ProjEDII.arvores;
 
 public class ArvoreBST{
     private No raiz = null;
+    private int numInsercoes;
+    private int numRemocoes;
+    private int numBuscas;
 
     public ArvoreBST(){
         this.raiz = null;
+        this.numInsercoes = 0;
+        this.numRemocoes = 0;
+        this.numBuscas = 0;
+    }
+
+    public No getRoot(){
+        return this.raiz;
+    }
+
+    public int getNumInsercoes(){
+        return this.numInsercoes;
+    }
+
+    public int getNumRemocoes(){
+        return this.numRemocoes;
+    }
+
+    public int getNumBuscas(){
+        return this.numBuscas;
     }
 
     public void setRoot(No no){
         this.raiz = no;
     }
 
-    public No getRoot(){
-        return this.raiz;
+    public void setNumInsercoes(int numInsercoes){
+        this.numInsercoes = numInsercoes;
+    }
+
+    public void setNumRemocoes(int numRemocoes){
+        this.numRemocoes = numRemocoes;
+    }
+
+    public void setNumBuscas(int numBuscas){
+        this.numBuscas = numBuscas;
     }
 
     public boolean isEmpty(){
@@ -20,38 +50,45 @@ public class ArvoreBST{
     }
 
     public void inserir(No no){
-        if (getRoot() == null) setRoot(no);
-        else inserir(getRoot(), no);
+        if (getRoot() == null)  setRoot(no);
+        else setNumInsercoes(getNumInsercoes()+inserir(getRoot(), no, 1));
     }
 
-    private void inserir(No raiz, No no){
+    private int inserir(No raiz, No no, int comparacoes){
+        comparacoes++;
+
         if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
             if (raiz.getEsquerda() == null){
                 raiz.setEsquerda(no);
                 no.setPai(raiz);
-            }else inserir(raiz.getEsquerda(), no);
+                return comparacoes;
+            }else return inserir(raiz.getEsquerda(), no, comparacoes);
         }else{
             if (raiz.getDireita() == null){
                 raiz.setDireita(no);
                 no.setPai(raiz);
-            }else inserir(raiz.getDireita(), no);
+                return comparacoes;
+            }else return inserir(raiz.getDireita(), no, comparacoes);
         }
     }
 
     public void remover(String nome){
-        remover(getRoot(), nome);
+        setNumRemocoes(remover(getRoot(), nome, 1));
     }
 
-    private void remover(No raiz, String nome){
-        if (raiz == null) return;
-        if (nome.compareTo(raiz.getNomeEscola()) < 0) remover(raiz.getEsquerda(), nome);
-        else if (nome.compareTo(raiz.getNomeEscola()) > 0) remover(raiz.getDireita(), nome);
+    private int remover(No raiz, String nome, int comparacoes){
+        if (raiz == null) return comparacoes;
+
+        comparacoes++;
+
+        if (nome.compareTo(raiz.getNomeEscola()) < 0) return remover(raiz.getEsquerda(), nome, comparacoes);
+        else if (nome.compareTo(raiz.getNomeEscola()) > 0) return remover(raiz.getDireita(), nome, comparacoes);
         else{
-            if (raiz.getEsquerda() == null && raiz.getDireita() == null) {
+            if (raiz.getEsquerda() == null && raiz.getDireita() == null){
                 if (raiz.getPai() != null){
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(null);
                     else raiz.getPai().setDireita(null);
-                } else setRoot(null);
+                }else setRoot(null);
             }
 
             else if (raiz.getEsquerda() == null){
@@ -59,18 +96,18 @@ public class ArvoreBST{
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getDireita());
                     else raiz.getPai().setDireita(raiz.getDireita());
                     raiz.getDireita().setPai(raiz.getPai());
-                } else{
+                }else{
                     setRoot(raiz.getDireita());
                     raiz.setPai(null);
                 }
             }
             
             else if (raiz.getDireita() == null){
-                if (raiz.getPai() != null) {
+                if (raiz.getPai() != null){
                     if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getEsquerda());
                     else raiz.getPai().setDireita(raiz.getEsquerda());
                     raiz.getEsquerda().setPai(raiz.getPai());
-                } else{
+                }else{
                     setRoot(raiz.getEsquerda());
                     raiz.setPai(null);
                 }
@@ -78,11 +115,11 @@ public class ArvoreBST{
 
             else{
                 No aux = menorMaior(raiz.getDireita());
-                remover(raiz.getDireita(), aux.getNomeEscola());
+                remover(raiz.getDireita(), aux.getNomeEscola(), comparacoes);
                 raiz.copiarValores(aux);
             }
         }
-        
+        return comparacoes;
     }
     
     protected No menorMaior(No no){
@@ -91,18 +128,22 @@ public class ArvoreBST{
     }
 
     public No buscar(String nome){
-        return buscar(getRoot(), nome);
+        int[] comparacoes ={1};
+        No aux = buscar(getRoot(), nome, comparacoes);
+        setNumBuscas(comparacoes[0]);
+        return aux;
     }
 
-    private No buscar(No raiz, String nome){
+    private No buscar(No raiz, String nome, int[] comparacoes){
         if (raiz == null) return null;
-        else if (nome.compareTo(raiz.getNomeEscola()) == 0) return raiz;
-        else if (nome.compareTo(raiz.getNomeEscola()) <= 0) return buscar(raiz.getEsquerda(), nome);
-        return buscar(raiz.getDireita(), nome);
+        comparacoes[0]++;
+        if (nome.compareTo(raiz.getNomeEscola()) == 0) return raiz;
+        else if (nome.compareTo(raiz.getNomeEscola()) < 0) return buscar(raiz.getEsquerda(), nome, comparacoes);
+        return buscar(raiz.getDireita(), nome, comparacoes);
     }
 
     public int altura(){
-        return altura(raiz);
+        return altura(getRoot());
     }
 
     protected int altura(No no){
