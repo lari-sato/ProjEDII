@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import ProjEDII.arvores.ArvoreAVL;
 import ProjEDII.arvores.ArvoreBST;
+import ProjEDII.arvores.No;
 import ProjEDII.arquivo.Arquivo;
 
 public class Main{
@@ -66,6 +67,11 @@ public class Main{
                         }
 
                     case 4:
+                        System.out.println("BST:");
+                        BST.printTree();
+                        System.out.println("AVL:");
+                        AVL.printTree();
+                        break;
 
                     case 5:
                         System.out.println("Saindo...");

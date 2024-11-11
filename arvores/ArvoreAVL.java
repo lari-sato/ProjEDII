@@ -2,7 +2,7 @@ package ProjEDII.arvores;
 
 public class ArvoreAVL extends ArvoreBST{
     public ArvoreAVL(){
-        setRoot(null);
+        setRaiz(null);
         setNumBuscas(0);
         setNumInsercoes(0);
         setNumRemocoes(0);
@@ -10,96 +10,111 @@ public class ArvoreAVL extends ArvoreBST{
 
     @Override
     public void inserir(No no){
-        if (getRoot() == null)  setRoot(no);
-        else setNumInsercoes(getNumInsercoes()+inserir(getRoot(), no, 1));
-    }
+        int comparacoes = 1;
+        if (getRaiz() == null) setRaiz(no);
+        else{
+            No atual = getRaiz();
+            No pai = null;
 
-    private int inserir(No raiz, No no, int comparacoes){
-        comparacoes++;
+            while(atual != null){
+                pai = atual;
+                comparacoes++;
+                if(no.getNomeEscola().compareTo(atual.getNomeEscola()) <= 0) atual = atual.getEsquerda();
+                else atual = atual.getDireita();
+            }
 
-        if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
-            if (raiz.getEsquerda() == null){
-                raiz.setEsquerda(no);
-                no.setPai(raiz);
-                return comparacoes;
-            }else inserir(raiz.getEsquerda(), no, comparacoes);
-        }else{
-            if (raiz.getDireita() == null){
-                raiz.setDireita(no);
-                no.setPai(raiz);
-                return comparacoes;
-            }else inserir(raiz.getDireita(), no, comparacoes);
+            if(no.getNomeEscola().compareTo(pai.getNomeEscola()) <= 0){
+                pai.setEsquerda(no);
+                no.setPai(pai);
+            }else{
+                pai.setDireita(no);
+                no.setPai(pai);
+            }
         }
-        balancear(raiz);
-        return comparacoes;
+        setNumInsercoes(getNumInsercoes()+comparacoes);
+        no = no.getPai();
+        while (no != null) {
+            no = balancear(no);
+            no = no.getPai();
+        }
     }
 
     @Override
-    public void remover(String nome){
-        setNumRemocoes(remover(getRoot(), nome, 1));
-    }
-
-    private int remover(No raiz, String nome, int comparacoes){
-        if (raiz == null) return comparacoes;
-
-        comparacoes++;
-
-        if (nome.compareTo(raiz.getNomeEscola()) < 0) return remover(raiz.getEsquerda(), nome, comparacoes);
-        else if (nome.compareTo(raiz.getNomeEscola()) > 0) return remover(raiz.getDireita(), nome, comparacoes);
+    public boolean remover(String nome){
+        int comparacoes = 1;
+        if(getRaiz() == null) return false;
         else{
-            if (raiz.getEsquerda() == null && raiz.getDireita() == null){
-                if (raiz.getPai() != null){
-                    if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(null);
-                    else raiz.getPai().setDireita(null);
-                }else setRoot(null);
+            No atual = getRaiz();
+            No pai = null;
+
+            while (atual != null && atual.getNomeEscola() != nome){
+                pai = atual;
+                comparacoes++;
+                if (nome.compareTo(atual.getNomeEscola()) < 0) atual = atual.getEsquerda();
+                else atual = atual.getDireita();
             }
 
-            else if (raiz.getEsquerda() == null){
-                if (raiz.getPai() != null){
-                    if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getDireita());
-                    else raiz.getPai().setDireita(raiz.getDireita());
-                    raiz.getDireita().setPai(raiz.getPai());
-                }else{
-                    setRoot(raiz.getDireita());
-                    raiz.setPai(null);
-                }
+            if (atual == null) return false;
+
+            if (atual.getEsquerda() == null && atual.getDireita() == null){
+                if(atual == getRaiz()) setRaiz(null);
+                else if(atual.getPai().getEsquerda() == atual) atual.getPai().setEsquerda(null);
+                else atual.getPai().setDireita(null);
             }
-            
-            else if (raiz.getDireita() == null){
-                if (raiz.getPai() != null){
-                    if (raiz == raiz.getPai().getEsquerda()) raiz.getPai().setEsquerda(raiz.getEsquerda());
-                    else raiz.getPai().setDireita(raiz.getEsquerda());
-                    raiz.getEsquerda().setPai(raiz.getPai());
-                }else{
-                    setRoot(raiz.getEsquerda());
-                    raiz.setPai(null);
+
+            else if (atual.getDireita() == null){
+                if(atual == getRaiz()){
+                    setRaiz(atual.getEsquerda());
+                    return true;
                 }
+                else if(atual.getPai().getEsquerda() == atual) atual.getPai().setEsquerda(atual.getEsquerda());
+                else pai.setDireita(atual.getEsquerda());
+                atual.getEsquerda().setPai(atual.getPai());
+            }
+
+            else if (atual.getEsquerda() == null){
+                if(atual == getRaiz()){
+                    setRaiz(atual.getDireita());
+                    return true;
+                }
+                else if(atual.getPai().getEsquerda() == atual) atual.getPai().setEsquerda(atual.getDireita());
+                else pai.setDireita(atual.getDireita());
+                atual.getDireita().setPai(atual.getPai());
             }
 
             else{
-                No aux = menorMaior(raiz.getDireita());
-                remover(raiz.getDireita(), aux.getNomeEscola(), comparacoes);
-                raiz.copiarValores(aux);
+                No menorMaior = menorMaior(atual.getDireita());
+                atual.copiarValores(menorMaior);
+
+                remover(menorMaior.getNomeEscola());
             }
+            setNumRemocoes(comparacoes);
+            atual = atual.getPai();
+            while (atual != null) {
+                atual = balancear(atual);
+                atual = atual.getPai();
+            }
+            return true;
         }
-        balancear(raiz);
-        return comparacoes;
     }
 
-    private void balancear(No no){
+    private No balancear(No no){
+        if (no == null) return null;
+
         int fb = fatorBalanceamento(no);
 
         if (fb > 1){
-            if (fatorBalanceamento(no.getEsquerda()) < 0) rotacionarEsquerda(no.getEsquerda());
-            rotacionarDireita(no);
+            if (fatorBalanceamento(no.getEsquerda()) < 0) no.setEsquerda(rotacionarEsquerda(no.getEsquerda()));
+            return rotacionarDireita(no);
         }else if (fb < -1){
-            if (fatorBalanceamento(no.getDireita()) > 0) rotacionarDireita(no.getDireita());
-            rotacionarEsquerda(no);
+            if (fatorBalanceamento(no.getDireita()) > 0) no.setDireita(rotacionarDireita(no.getDireita()));
+            return rotacionarEsquerda(no);
         }
-        if (no.getPai() == null) setRoot(no);
+        if (no.getPai() == null) setRaiz(no);
+        return no;
     }
 
-    private void rotacionarDireita(No no){
+    private No rotacionarDireita(No no){
         No aux = no.getEsquerda();
         no.setEsquerda(aux.getDireita());
         if (aux.getDireita() != null) aux.getDireita().setPai(no);
@@ -109,12 +124,14 @@ public class ArvoreAVL extends ArvoreBST{
         if (no.getPai() != null){
             if (no.getPai().getEsquerda() == no) no.getPai().setEsquerda(aux);
             else no.getPai().setDireita(aux);
-        }else setRoot(aux);
+        }else setRaiz(aux);
 
         no.setPai(aux);
+
+        return aux;
     }
 
-    private void rotacionarEsquerda(No no){
+    private No rotacionarEsquerda(No no){
         No aux = no.getDireita();
         no.setDireita(aux.getEsquerda());
         if (aux.getEsquerda() != null) aux.getEsquerda().setPai(no);
@@ -124,9 +141,11 @@ public class ArvoreAVL extends ArvoreBST{
         if (no.getPai() != null){
             if (no.getPai().getEsquerda() == no) no.getPai().setEsquerda(aux);
             else no.getPai().setDireita(aux);
-        }else setRoot(aux);
+        }else setRaiz(aux);
 
         no.setPai(aux);
+
+        return aux;
     }
     
     private int fatorBalanceamento(No no){

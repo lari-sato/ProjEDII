@@ -22,6 +22,13 @@ public class No{
     private float REP_3;
     private float ABA_3;
 
+    public No(String nome){
+        this.esquerda = null;
+        this.direita = null;
+        this.pai = null;
+        this.nomeEscola = nome;
+    }
+
     public No(){
         this.esquerda = null;
         this.direita = null;
