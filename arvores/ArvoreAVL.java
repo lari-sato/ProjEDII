@@ -9,32 +9,50 @@ public class ArvoreAVL extends ArvoreBST{
     }
 
     @Override
-public void inserir(No no){
-    int comparacoes = 1;
-    if (getRaiz() == null){
-        setRaiz(no);
-        return;
+    public void inserir(No no){
+        int comparacoes = 1;
+        if (getRaiz() == null) setRaiz(no);
+        else{
+            No atual = new No();
+            atual = getRaiz();
+            No pai = null;
+            System.out.println(atual.getNomeEscola());
+            System.out.println(getRaiz().getDireita());
+
+            while(atual != null){
+                System.out.println();
+                pai = atual;
+                comparacoes++;
+                System.out.println(no.getNomeEscola().compareTo(atual.getNomeEscola()));
+                System.out.println(atual.getDireita());
+                System.out.println(atual.getEsquerda());
+                if(no.getNomeEscola().compareTo(atual.getNomeEscola()) <= 0){
+                    System.out.println("<= 0");
+                    System.out.println(atual.getNomeEscola());
+                    atual = atual.getEsquerda();
+                } 
+                else{
+                    System.out.println("> 0");
+                    atual = atual.getDireita();
+                    
+                }
+            }
+
+            if(no.getNomeEscola().compareTo(pai.getNomeEscola()) <= 0){
+                pai.setEsquerda(no);
+                no.setPai(pai);
+            }else{
+                pai.setDireita(no);
+                no.setPai(pai);
+            }
+        }
+        setNumInsercoes(getNumInsercoes()+comparacoes);
+        no = no.getPai();
+        while (no != null){
+            no = balancear(no);
+            no = no.getPai();
+        }
     }
-
-    No atual = getRaiz();
-    No pai = null;
-
-    while (atual != null){
-        pai = atual;
-        comparacoes++;
-
-        if (no.getNomeEscola().compareTo(atual.getNomeEscola()) < 0) atual = atual.getEsquerda();
-        else if (no.getNomeEscola().compareTo(atual.getNomeEscola()) > 0) atual = atual.getDireita();
-        else return;
-    }
-
-    if (no.getNomeEscola().compareTo(pai.getNomeEscola()) < 0) pai.setEsquerda(no);
-    else pai.setDireita(no);
-
-    setNumInsercoes(getNumInsercoes()+comparacoes);
-
-    balancear(pai);
-}
 
     @Override
     public boolean remover(String nome){
@@ -82,12 +100,12 @@ public void inserir(No no){
             else{
                 No menorMaior = menorMaior(atual.getDireita());
                 atual.copiarValores(menorMaior);
-
                 remover(menorMaior.getNomeEscola());
             }
+            
             setNumRemocoes(comparacoes);
             atual = atual.getPai();
-            while (atual != null) {
+            while (atual != null){
                 atual = balancear(atual);
                 atual = atual.getPai();
             }

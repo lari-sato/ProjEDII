@@ -31,11 +31,8 @@ public class Arquivo{
                 no.setREP_2(Float.parseFloat(dados[12]));
                 no.setABA_2(Float.parseFloat(dados[13]));
                 no.setAPR_3(Float.parseFloat(dados[14]));
-                System.out.print(".");
                 BST.inserir(no);
-                System.out.println("BST");
                 AVL.inserir(no);
-                System.out.println("AVL");
             }
         } catch (IOException e){
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
