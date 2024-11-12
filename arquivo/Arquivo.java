@@ -8,12 +8,12 @@ import ProjEDII.arvores.ArvoreAVL;
 import ProjEDII.arvores.ArvoreBST;
 import ProjEDII.arvores.No;
 
-public class Arquivo{
-    public void inserirDados(String arquivo, ArvoreBST BST, ArvoreAVL AVL){
+public class Arquivo {
+    public void inserirDados(String arquivo, ArvoreBST BST, ArvoreAVL AVL) {
         String linha;
-        try (BufferedReader buffer = new BufferedReader(new FileReader(arquivo))){
+        try (BufferedReader buffer = new BufferedReader(new FileReader(arquivo))) {
             buffer.readLine(); // Pula a primeira linha com títulos
-            while ((linha = buffer.readLine()) != null){
+            while ((linha = buffer.readLine()) != null) {
                 String[] dados = linha.split(";");
                 No no = new No();
                 no.setAno(Integer.parseInt(dados[0]));
@@ -34,10 +34,10 @@ public class Arquivo{
                 BST.inserir(no);
                 AVL.inserir(no);
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
             e.printStackTrace();
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("Erro ao converter número: " + e.getMessage());
             e.printStackTrace();
         }

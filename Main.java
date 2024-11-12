@@ -3,13 +3,13 @@ package ProjEDII;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import ProjEDII.arquivo.Arquivo;
 import ProjEDII.arvores.ArvoreAVL;
 import ProjEDII.arvores.ArvoreBST;
+import ProjEDII.arquivo.Arquivo;
 
 public class Main{
     public static void main(String[] args){
-    	String nomeArquivo = "ProjEDII\\arquivo\\dataset.csv", nome;
+    	String nomeArquivo = "src/projEDII/dataset.csv", nome;
         Arquivo arquivo = new Arquivo();
         ArvoreBST BST = new ArvoreBST();
         ArvoreAVL AVL = new ArvoreAVL();
@@ -68,11 +68,16 @@ public class Main{
                             }
 
                         case 4:
-                        	 System.out.println("BST:");
-                             BST.printTree();
-                             System.out.println("AVL:");
-                             AVL.printTree();
+                            System.out.println("BST:");
+                            BST.printTree();
+                            System.out.println("Altura da árvore BST: " + BST.altura(BST.getRaiz())); // Adiciona a altura da BST
+                            
+                           // System.out.println("AVL:");
+                          //  AVL.printTree();
+                          //  System.out.println("Altura da árvore AVL: " + AVL.calcularAltura()); // Já estava presente
                             break;
+
+
 
                         case 5:
                             System.out.println("Saindo...");
