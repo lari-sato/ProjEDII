@@ -9,35 +9,32 @@ public class ArvoreAVL extends ArvoreBST{
     }
 
     @Override
-    public void inserir(No no){
-        int comparacoes = 1;
-        if (getRaiz() == null) setRaiz(no);
-        else{
-            No atual = getRaiz();
-            No pai = null;
-
-            while(atual != null){
-                pai = atual;
-                comparacoes++;
-                if(no.getNomeEscola().compareTo(atual.getNomeEscola()) <= 0) atual = atual.getEsquerda();
-                else atual = atual.getDireita();
-            }
-
-            if(no.getNomeEscola().compareTo(pai.getNomeEscola()) <= 0){
-                pai.setEsquerda(no);
-                no.setPai(pai);
-            }else{
-                pai.setDireita(no);
-                no.setPai(pai);
-            }
-        }
-        setNumInsercoes(getNumInsercoes()+comparacoes);
-        no = no.getPai();
-        while (no != null) {
-            no = balancear(no);
-            no = no.getPai();
-        }
+public void inserir(No no){
+    int comparacoes = 1;
+    if (getRaiz() == null){
+        setRaiz(no);
+        return;
     }
+
+    No atual = getRaiz();
+    No pai = null;
+
+    while (atual != null){
+        pai = atual;
+        comparacoes++;
+
+        if (no.getNomeEscola().compareTo(atual.getNomeEscola()) < 0) atual = atual.getEsquerda();
+        else if (no.getNomeEscola().compareTo(atual.getNomeEscola()) > 0) atual = atual.getDireita();
+        else return;
+    }
+
+    if (no.getNomeEscola().compareTo(pai.getNomeEscola()) < 0) pai.setEsquerda(no);
+    else pai.setDireita(no);
+
+    setNumInsercoes(getNumInsercoes()+comparacoes);
+
+    balancear(pai);
+}
 
     @Override
     public boolean remover(String nome){
@@ -100,7 +97,7 @@ public class ArvoreAVL extends ArvoreBST{
 
     private No balancear(No no){
         if (no == null) return null;
-
+        
         int fb = fatorBalanceamento(no);
 
         if (fb > 1){
