@@ -9,6 +9,8 @@ import ProjEDII.arvores.ArvoreBST;
 import ProjEDII.arvores.No;
 
 public class Arquivo {
+    public Arquivo() {
+    }
     public void inserirDados(String arquivo, ArvoreBST BST, ArvoreAVL AVL) {
         String linha;
         try (BufferedReader buffer = new BufferedReader(new FileReader(arquivo))) {

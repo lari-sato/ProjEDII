@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 import ProjEDII.arvores.ArvoreAVL;
 import ProjEDII.arvores.ArvoreBST;
+import ProjEDII.arvores.No;
 import ProjEDII.arquivo.Arquivo;
 
 public class Main{
     public static void main(String[] args){
-    	String nomeArquivo = "src/projEDII/dataset.csv", nome;
+    	String nomeArquivo = "ProjEDII\\arquivo\\dataset.csv", nome;
         Arquivo arquivo = new Arquivo();
         ArvoreBST BST = new ArvoreBST();
         ArvoreAVL AVL = new ArvoreAVL();
@@ -70,11 +71,9 @@ public class Main{
                         case 4:
                             System.out.println("BST:");
                             BST.printTree();
-                            System.out.println("Altura da árvore BST: " + BST.altura(BST.getRaiz())); // Adiciona a altura da BST
                             
-                           // System.out.println("AVL:");
-                          //  AVL.printTree();
-                          //  System.out.println("Altura da árvore AVL: " + AVL.calcularAltura()); // Já estava presente
+                           System.out.println("AVL:");
+                           AVL.printTree();
                             break;
 
 

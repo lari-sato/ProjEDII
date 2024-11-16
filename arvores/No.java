@@ -3,7 +3,7 @@ package ProjEDII.arvores;
 public class No{
     private No esquerda;
     private No direita;
-    private No pai;
+    private int altura;
     private int ano;
     private int codDiretoria;
     private String nomeDiretoria;
@@ -25,14 +25,12 @@ public class No{
     public No(String nome){
         this.esquerda = null;
         this.direita = null;
-        this.pai = null;
         this.nomeEscola = nome;
     }
 
     public No(){
         this.esquerda = null;
         this.direita = null;
-        this.pai = null;
         this.ano = 0;
         this.codDiretoria = 0;
         this.nomeDiretoria = "";
@@ -59,9 +57,9 @@ public class No{
     public No getDireita(){
         return direita;
     }
-
-    public No getPai(){
-        return pai;
+    
+    public int getAltura(){
+        return altura;
     }
 
     public int getAno(){
@@ -140,8 +138,8 @@ public class No{
         this.direita = direita;
     }
 
-    public void setPai(No pai){
-        this.pai = pai;
+    public void setAltura(int altura){
+        this.altura = altura;
     }
 
     public void setAno(int ano){

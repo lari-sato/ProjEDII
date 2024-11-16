@@ -1,248 +1,77 @@
 package ProjEDII.arvores;
 
-public class ArvoreAVL extends ArvoreBST {
-    public ArvoreAVL() {
+public class ArvoreAVL extends ArvoreBST{
+    public ArvoreAVL(){
         setRaiz(null);
         setNumBuscas(0);
         setNumInsercoes(0);
         setNumRemocoes(0);
     }
 
+    public int maior(int altura1, int altura2){
+        return (altura1 > altura2) ? altura1 : altura2;
+    }
+
     @Override
-    public void inserir(No no) {
-        int comparacoes = 1; // Inicializa a contagem de comparações
-        if (getRaiz() == null) {
-            setRaiz(no);
-            setNumInsercoes(getNumInsercoes() + comparacoes); // Atualiza a contagem de comparações
-            return;
-        }
-
-        No atual = getRaiz();
-        No pai = null;
-
-        // Percorre a árvore para encontrar a posição do novo nó
-        while (atual != null) {
-            pai = atual;
-            comparacoes++;
-
-            if (no.getNomeEscola().compareTo(atual.getNomeEscola()) < 0) {
-                atual = atual.getEsquerda();
-            } else if (no.getNomeEscola().compareTo(atual.getNomeEscola()) > 0) {
-                atual = atual.getDireita();
-            } else {
-                setNumInsercoes(getNumInsercoes() + comparacoes); // Atualiza as comparações
-                return; // Nó já existe, não precisa ser inserido novamente
-            }
-        }
-
-        // Inserção do nó no lugar correto
-        if (no.getNomeEscola().compareTo(pai.getNomeEscola()) < 0) {
-            pai.setEsquerda(no);
+    public void inserir(No no){
+        int[] comparacoes = {1};
+        setRaiz(inserir(getRaiz(), no, comparacoes));
+        setNumInsercoes(getNumInsercoes()+comparacoes[0]);
+    }
+    
+    private No inserir(No raiz, No no, int[] comparacoes){
+        if (raiz == null) return no;
+        comparacoes[0]++;
+    
+        if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
+            raiz.setEsquerda(inserir(raiz.getEsquerda(), no, comparacoes));
+            raiz = balancear(raiz, no);
         } else {
-            pai.setDireita(no);
+            raiz.setDireita(inserir(raiz.getDireita(), no, comparacoes));
+            raiz = balancear(raiz, no);
         }
-        no.setPai(pai);
-
-        // Atualiza o número total de comparações para inserções
-        setNumInsercoes(getNumInsercoes() + comparacoes);
-
-        // Balancear a árvore após a inserção
-        while (pai != null) {
-            pai = balancear(pai);
-            pai = pai.getPai();
-        }
+    
+        return raiz;
     }
-
-    @Override
-    public boolean remover(String nome) {
-        int comparacoes = 1; // Inicializa a contagem de comparações
-        if (getRaiz() == null) {
-            return false;
+    
+    private No balancear(No raiz, No no){
+        if ((altura(raiz.getEsquerda()) - altura(raiz.getDireita())) > 1){
+            if (no.getNomeEscola().compareTo(raiz.getEsquerda().getNomeEscola()) <= 0) raiz = rotacionarDireita(raiz);
+            else raiz = rotacionarEsquerdaDireita(no);
         }
-
-        No atual = getRaiz();
-        No pai = null;
-
-        // Encontra o nó que precisa ser removido
-        while (atual != null && !nome.equals(atual.getNomeEscola())) {
-            pai = atual;
-            comparacoes++; // Incrementa o número de comparações
-            if (nome.compareTo(atual.getNomeEscola()) < 0) {
-                atual = atual.getEsquerda();
-            } else {
-                atual = atual.getDireita();
-            }
+        else if ((altura(raiz.getEsquerda()) - altura(raiz.getDireita())) < -1){
+            if (no.getNomeEscola().compareTo(raiz.getDireita().getNomeEscola()) > 0) raiz = rotacionarEsquerda(raiz);
+            else raiz = rotacionarDireitaEsquerda(no);
         }
-
-        if (atual == null) {
-            setNumRemocoes(getNumRemocoes() + comparacoes); // Atualiza o número de comparações antes de retornar falso
-            return false;
-        }
-
-        // Caso 1: Nó sem filhos (nó folha)
-        if (atual.getEsquerda() == null && atual.getDireita() == null) {
-            if (atual == getRaiz()) {
-                setRaiz(null);
-            } else if (pai.getEsquerda() == atual) {
-                pai.setEsquerda(null);
-            } else {
-                pai.setDireita(null);
-            }
-        }
-        // Caso 2: Nó com apenas um filho
-        else if (atual.getDireita() == null) {
-            if (atual == getRaiz()) {
-                setRaiz(atual.getEsquerda());
-                getRaiz().setPai(null);
-            } else if (pai.getEsquerda() == atual) {
-                pai.setEsquerda(atual.getEsquerda());
-            } else {
-                pai.setDireita(atual.getEsquerda());
-            }
-            atual.getEsquerda().setPai(pai);
-        } else if (atual.getEsquerda() == null) {
-            if (atual == getRaiz()) {
-                setRaiz(atual.getDireita());
-                getRaiz().setPai(null);
-            } else if (pai.getEsquerda() == atual) {
-                pai.setEsquerda(atual.getDireita());
-            } else {
-                pai.setDireita(atual.getDireita());
-            }
-            atual.getDireita().setPai(pai);
-        }
-        // Caso 3: Nó com dois filhos
-        else {
-            No sucessor = menorMaior(atual.getDireita());
-            atual.copiarValores(sucessor);
-
-            // Remover o sucessor (que não terá dois filhos, sendo um caso 1 ou caso 2)
-            if (sucessor.getPai().getEsquerda() == sucessor) {
-                sucessor.getPai().setEsquerda(sucessor.getDireita());
-            } else {
-                sucessor.getPai().setDireita(sucessor.getDireita());
-            }
-            if (sucessor.getDireita() != null) {
-                sucessor.getDireita().setPai(sucessor.getPai());
-            }
-
-            // Atualizar o número de comparações para o sucessor removido
-            comparacoes++; // Incrementa para a remoção do sucessor
-        }
-
-        // Atualiza o número total de comparações para remoções
-        setNumRemocoes(getNumRemocoes() + comparacoes);
-
-        // Balancear a árvore a partir do pai do nó removido
-        while (pai != null) {
-            pai = balancear(pai);
-            pai = pai.getPai();
-        }
-
-        return true;
+        raiz.setAltura(maior(altura(raiz.getEsquerda()), altura(raiz.getDireita()))+1);
+        return raiz;
     }
-
-    @Override
-    public No buscar(String nome) {
-        int comparacoes = 1; // Inicializa a contagem de comparações
-        No atual = getRaiz();
-
-        // Busca o nó na árvore
-        while (atual != null) {
-            if (nome.equals(atual.getNomeEscola())) {
-                setNumBuscas(comparacoes); // Atualiza o número total de comparações
-                return atual;
-            }
-            comparacoes++;
-            if (nome.compareTo(atual.getNomeEscola()) < 0) {
-                atual = atual.getEsquerda();
-            } else {
-                atual = atual.getDireita();
-            }
-        }
-
-        setNumBuscas(comparacoes); // Atualiza o número total de comparações
-        return null;
-    }
-
-    private No balancear(No no) {
-        if (no == null) return null;
-
-        int fb = fatorBalanceamento(no);
-
-        // Balanceamento à direita
-        if (fb > 1) {
-            if (fatorBalanceamento(no.getEsquerda()) < 0) {
-                no.setEsquerda(rotacionarEsquerda(no.getEsquerda()));
-            }
-            return rotacionarDireita(no);
-        }
-        // Balanceamento à esquerda
-        else if (fb < -1) {
-            if (fatorBalanceamento(no.getDireita()) > 0) {
-                no.setDireita(rotacionarDireita(no.getDireita()));
-            }
-            return rotacionarEsquerda(no);
-        }
-
-        return no;
-    }
-
-    private No rotacionarDireita(No no) {
+    
+    private No rotacionarDireita(No no){
         No aux = no.getEsquerda();
         no.setEsquerda(aux.getDireita());
-        if (aux.getDireita() != null) aux.getDireita().setPai(no);
         aux.setDireita(no);
-        aux.setPai(no.getPai());
-
-        if (no.getPai() != null) {
-            if (no.getPai().getEsquerda() == no) {
-                no.getPai().setEsquerda(aux);
-            } else {
-                no.getPai().setDireita(aux);
-            }
-        } else {
-            setRaiz(aux);
-        }
-
-        no.setPai(aux);
-
+        no.setAltura(maior(altura(no.getEsquerda()), altura(no.getDireita()))+1);
+        aux.setAltura(maior(altura(aux.getEsquerda()), altura(aux.getDireita()))+1);
         return aux;
     }
-
-    private No rotacionarEsquerda(No no) {
+    
+    private No rotacionarEsquerda(No no){
         No aux = no.getDireita();
         no.setDireita(aux.getEsquerda());
-        if (aux.getEsquerda() != null) aux.getEsquerda().setPai(no);
         aux.setEsquerda(no);
-        aux.setPai(no.getPai());
-
-        if (no.getPai() != null) {
-            if (no.getPai().getEsquerda() == no) {
-                no.getPai().setEsquerda(aux);
-            } else {
-                no.getPai().setDireita(aux);
-            }
-        } else {
-            setRaiz(aux);
-        }
-
-        no.setPai(aux);
-
+        no.setAltura(maior(altura(no.getEsquerda()), altura(no.getDireita()))+1);
+        aux.setAltura(maior(altura(aux.getEsquerda()), altura(aux.getDireita()))+1);
         return aux;
     }
-
-    private int fatorBalanceamento(No no) {
-        return no == null ? 0 : altura(no.getEsquerda()) - altura(no.getDireita());
+    
+    private No rotacionarEsquerdaDireita(No no){
+        no.setEsquerda(rotacionarEsquerda(no.getEsquerda()));
+        return rotacionarDireita(no);
     }
-
-    @Override
-    protected int altura(No no) {
-        if (no == null) return 0;
-
-        int alturaEsquerda = altura(no.getEsquerda());
-        int alturaDireita = altura(no.getDireita());
-
-        return Math.max(alturaEsquerda, alturaDireita) + 1;
+    
+    private No rotacionarDireitaEsquerda(No no){
+        no.setDireita(rotacionarDireita(no.getDireita()));
+        return rotacionarEsquerda(no);
     }
 }
