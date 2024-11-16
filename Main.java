@@ -33,9 +33,14 @@ public class Main{
 
                     switch(opcao){
                         case 1:
-                            arquivo.inserirDados(nomeArquivo, BST, AVL);
-                            System.out.println("Número de comparações na BST: " + BST.getNumInsercoes());
-                            System.out.println("Número de comparações na AVL: " + AVL.getNumInsercoes());
+                            if (!BST.isEmpty() || !AVL.isEmpty()) System.out.println("Dados já inseridos!");
+                            else{
+                                arquivo.inserirBST(nomeArquivo, BST);
+                                arquivo.inserirAVL(nomeArquivo, AVL);
+                                System.out.println("Número de comparações na BST: " + BST.getNumInsercoes());
+                                System.out.println("Número de comparações na AVL: " + AVL.getNumInsercoes());
+                            }
+                            
                             break;
                             
                         case 2:
@@ -48,8 +53,12 @@ public class Main{
                                 BST.remover(nome);
                                 AVL.remover(nome);
 
-                                System.out.println("Número de comparações na BST: " + BST.getNumRemocoes());
-                                System.out.println("Número de comparações na AVL: " + AVL.getNumRemocoes());
+                                if (BST.getNumRemocoes() == 0 || AVL.getNumRemocoes() == 0) System.out.println("Escola não encontrada!");
+                                else{
+                                    System.out.println("Número de comparações na BST: " + BST.getNumRemocoes());
+                                    System.out.println("Número de comparações na AVL: " + AVL.getNumRemocoes());
+                                }
+                                
                                 break;
                             }
 
@@ -63,8 +72,11 @@ public class Main{
                                 BST.buscar(nome);
                                 AVL.buscar(nome);
 
-                                System.out.println("Número de comparações na BST: " + BST.getNumBuscas());
-                                System.out.println("Número de comparações na AVL: " + AVL.getNumBuscas());
+                                if (BST.getNumBuscas() == 0 || AVL.getNumBuscas() == 0) System.out.println("Escola não encontrada!");
+                                else{
+                                    System.out.println("Número de comparações na BST: " + BST.getNumBuscas());
+                                    System.out.println("Número de comparações na AVL: " + AVL.getNumBuscas());
+                                }
                                 break;
                             }
 

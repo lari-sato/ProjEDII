@@ -71,62 +71,33 @@ public class ArvoreBST{
         return comparacoes;
     }
 
-    public boolean remover(String nome){
-        int comparacoes = 1;
-        if (getRaiz() == null) return false;
+    public void remover(String nome){
+        int[] comparacoes = {1};
+        boolean[] removido = {false};
+        setRaiz(remover(getRaiz(), nome, comparacoes, removido));
+        setNumRemocoes(removido[0] == true ? comparacoes[0] : 0);
+    }
+    
+    private No remover(No raiz, String nome, int[] comparacoes, boolean[] removido){
+        if (raiz == null) return null;
 
-        No atual = getRaiz();
-        No pai = null;
-
-        while (atual != null && !atual.getNomeEscola().equals(nome)){
-            pai = atual;
-            comparacoes++;
-            if (nome.compareTo(atual.getNomeEscola()) < 0) atual = atual.getEsquerda();
-            else atual = atual.getDireita();
-        }
-
-        if (atual == null) return false;
-
-        // Caso 1: Nó sem filhos
-        if (atual.getEsquerda() == null && atual.getDireita() == null){
-            if (atual == getRaiz()) setRaiz(null);
-            else if (pai.getEsquerda() == atual) pai.setEsquerda(null);
-            else pai.setDireita(null);
-        }
-        // Caso 2: Nó com apenas um filho
-        else if (atual.getDireita() == null){
-            if (atual == getRaiz()){
-                setRaiz(atual.getEsquerda());
-                getRaiz().setPai(null);
-            } else if (pai.getEsquerda() == atual) pai.setEsquerda(atual.getEsquerda());
-            else pai.setDireita(atual.getEsquerda());
-            atual.getEsquerda().setPai(pai);
-        } else if (atual.getEsquerda() == null){
-            if (atual == getRaiz()){
-                setRaiz(atual.getDireita());
-                getRaiz().setPai(null);
-            } else if (pai.getEsquerda() == atual) pai.setEsquerda(atual.getDireita());
-            else pai.setDireita(atual.getDireita());
-            atual.getDireita().setPai(pai);
-        }
-        // Caso 3: Nó com dois filhos
+        comparacoes[0]++;
+    
+        if (nome.compareTo(raiz.getNomeEscola()) < 0) raiz.setEsquerda(remover(raiz.getEsquerda(), nome, comparacoes, removido));
+        else if (nome.compareTo(raiz.getNomeEscola()) > 0) raiz.setDireita(remover(raiz.getDireita(), nome, comparacoes, removido));
         else{
-            No sucessor = menorMaior(atual.getDireita());
-            atual.copiarValores(sucessor);
+            removido[0] = true;
 
-            // Remover o sucessor (que não terá dois filhos, sendo um caso 1 ou caso 2)
-            if (sucessor.getPai().getEsquerda() == sucessor){
-                sucessor.getPai().setEsquerda(sucessor.getDireita());
-            } else{
-                sucessor.getPai().setDireita(sucessor.getDireita());
-            }
-            if (sucessor.getDireita() != null){
-                sucessor.getDireita().setPai(sucessor.getPai());
-            }
+            // Nó com apenas um filho
+            if (raiz.getEsquerda() == null) return raiz.getDireita();
+            else if (raiz.getDireita() == null) return raiz.getEsquerda();
+    
+            // Nó com dois filhos
+            No aux = menorMaior(raiz.getDireita()); // Escolher o sucessor do nó
+            raiz.copiarValores(aux); // Copia os valores do sucessor para o nó
+            raiz.setDireita(remover(raiz.getDireita(), aux.getNomeEscola(), comparacoes, removido)); //Deletear o sucessor
         }
-
-        setNumRemocoes(getNumRemocoes() + comparacoes);
-        return true;
+        return raiz;
     }
 
     protected No menorMaior(No no){
@@ -136,17 +107,22 @@ public class ArvoreBST{
 
     public No buscar(String nome){
         int[] comparacoes ={1};
-        No aux = buscar(getRaiz(), nome, comparacoes);
-        setNumBuscas(comparacoes[0]);
+        boolean[] encontrado = {false};
+        No aux = buscar(getRaiz(), nome, comparacoes, encontrado);
+        setNumBuscas(encontrado[0] == true ? comparacoes[0] : 0);
         return aux;
     }
 
-    private No buscar(No raiz, String nome, int[] comparacoes){
+    private No buscar(No raiz, String nome, int[] comparacoes, boolean[] encontrado){
         if (raiz == null) return null;
         comparacoes[0]++;
-        if (nome.compareTo(raiz.getNomeEscola()) == 0) return raiz;
-        else if (nome.compareTo(raiz.getNomeEscola()) < 0) return buscar(raiz.getEsquerda(), nome, comparacoes);
-        return buscar(raiz.getDireita(), nome, comparacoes);
+        if (nome.compareTo(raiz.getNomeEscola()) == 0){
+            encontrado[0] = true;
+            return raiz;
+        } 
+
+        else if (nome.compareTo(raiz.getNomeEscola()) < 0) return buscar(raiz.getEsquerda(), nome, comparacoes, encontrado);
+        return buscar(raiz.getDireita(), nome, comparacoes, encontrado);
     }
 
     public int altura(No no){
