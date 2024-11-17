@@ -1,8 +1,13 @@
+//Giovana Simões Franco     RA: 10417646
+//Julia Santos Oliveira     RA: 10417672
+//Larissa Yuri Sato         RA: 10418318
+
 package ProjEDII.arvores;
 
 public class ArvoreAVL extends ArvoreBST{
     public ArvoreAVL(){
         setRaiz(null);
+        setDados(0);
         setNumBuscas(0);
         setNumInsercoes(0);
         setNumRemocoes(0);
@@ -17,6 +22,7 @@ public class ArvoreAVL extends ArvoreBST{
         int[] comparacoes ={1};
         setRaiz(inserir(getRaiz(), no, comparacoes));
         setNumInsercoes(getNumInsercoes() + comparacoes[0]);
+        setDados(getDados() + 1);
     }
     
     private No inserir(No raiz, No no, int[] comparacoes){
@@ -46,6 +52,7 @@ public class ArvoreAVL extends ArvoreBST{
         else if (nome.compareTo(raiz.getNomeEscola()) > 0) raiz.setDireita(remover(raiz.getDireita(), nome, comparacoes, removido));
         else{
             removido[0] = true;
+            setDados(getDados() - 1);
 
             // Nó com apenas um filho
             if (raiz.getEsquerda() == null) return raiz.getDireita();

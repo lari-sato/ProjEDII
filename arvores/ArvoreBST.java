@@ -1,7 +1,12 @@
+//Giovana Simões Franco     RA: 10417646
+//Julia Santos Oliveira     RA: 10417672
+//Larissa Yuri Sato         RA: 10418318
+
 package ProjEDII.arvores;
 
 public class ArvoreBST{
     private No raiz = null;
+    private int quantDados;
     private int numInsercoes;
     private int numRemocoes;
     private int numBuscas;
@@ -15,6 +20,10 @@ public class ArvoreBST{
 
     public No getRaiz(){
         return this.raiz;
+    }
+
+    public int getDados(){
+        return this.quantDados;
     }
 
     public int getNumInsercoes(){
@@ -31,6 +40,10 @@ public class ArvoreBST{
 
     public void setRaiz(No no){
         this.raiz = no;
+    }
+
+    public void setDados(int quantDados){
+        this.quantDados = quantDados;
     }
 
     public void setNumInsercoes(int numInsercoes){
@@ -53,14 +66,19 @@ public class ArvoreBST{
         if (getRaiz() == null){
             setRaiz(no);
             setNumInsercoes(getNumInsercoes()+1);
+            setDados(getDados() + 1);
         }
-        else setNumInsercoes(getNumInsercoes() + inserir(getRaiz(), no, 1));
+        else{
+            setNumInsercoes(getNumInsercoes() + inserir(getRaiz(), no, 1));
+            setDados(getDados() + 1);
+        }
     }
     
     private int inserir(No raiz, No no, int comparacoes){
         if (raiz == null) return comparacoes;
+        
         comparacoes++;
-    
+        
         if (no.getNomeEscola().compareTo(raiz.getNomeEscola()) <= 0){
             if (raiz.getEsquerda() == null) raiz.setEsquerda(no);
             else comparacoes = inserir(raiz.getEsquerda(), no, comparacoes);
@@ -87,6 +105,7 @@ public class ArvoreBST{
         else if (nome.compareTo(raiz.getNomeEscola()) > 0) raiz.setDireita(remover(raiz.getDireita(), nome, comparacoes, removido));
         else{
             removido[0] = true;
+            setDados(getDados() - 1);
 
             // Nó com apenas um filho
             if (raiz.getEsquerda() == null) return raiz.getDireita();
@@ -150,4 +169,5 @@ public class ArvoreBST{
             printTree(no.getEsquerda(), nivel + 1);
         }
     }
+    
 }

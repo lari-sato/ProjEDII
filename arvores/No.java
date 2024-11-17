@@ -1,3 +1,7 @@
+//Giovana Simões Franco     RA: 10417646
+//Julia Santos Oliveira     RA: 10417672
+//Larissa Yuri Sato         RA: 10418318
+
 package ProjEDII.arvores;
 
 public class No{

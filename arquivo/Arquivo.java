@@ -1,3 +1,7 @@
+//Giovana Simões Franco     RA: 10417646
+//Julia Santos Oliveira     RA: 10417672
+//Larissa Yuri Sato         RA: 10418318
+
 package ProjEDII.arquivo;
 
 import java.io.BufferedReader;
@@ -35,6 +39,8 @@ public class Arquivo {
                 no.setREP_2(Float.parseFloat(dados[12]));
                 no.setABA_2(Float.parseFloat(dados[13]));
                 no.setAPR_3(Float.parseFloat(dados[14]));
+                no.setREP_3(Float.parseFloat(dados[15]));
+                no.setABA_3(Float.parseFloat(dados[16]));
                 AVL.inserir(no);
             }
         } catch (IOException e) {
